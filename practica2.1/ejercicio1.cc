@@ -2,33 +2,36 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-/*
-struct sockaddr{
-	
-}
+#include <iostream>
+#include <string.h>
 
-struct addrinfo{
-	int ai_flags;
-	int ai_family;
-	int ai_socktype;
-	int ai_protocol;
-	socklen_t ai_addrlen;
-	struct sockaddr *ai_addr;
-	char *ai_cannoname;
-	struct addrinfo *ai_next;
-}*/
+int main(int argc, char** argv) {
+	struct addrinfo hints;
+	struct addrinfo* res;
 
-int main(int argc, char **argv){
-	addrinfo* hints;
-	hints.ai.flags = AI_PASSIVE;
-	hints.ai.family = AF_INET;
-	hints.ai.family = SOCK_DGRAM;
+	memset((void*)&hints, 0, sizeof(struct addrinfo));
 
-	int rc = getaddrinfo(argv[1], argv[2], &hints, &result);
-	int sd = socket(result->ai_family, result->ai_socktype, 0);
+	// Criterios de búsqueda
+	hints.ai_flags = AF_UNSPEC;
+	hints.ai_family = AF_UNSPEC;
 
-	bind(sd, (struct sockaddr *) result->ai_addr, result->(ai_addrlen);
+	// Obtiene la información de direcciones según lo especificado en argv
+	int rc = getaddrinfo(argv[1], argv[2], &hints, &res);
+	if (rc != 0) {
+		std::cout << gai_strerror(rc) << "\n";
+		return -1;
+	}
 
-	getnameinfo((struct sockaddr * ) 
+	// Escribe las direcciones 
+	for (struct addrinfo* i = res; i != 0; i = i->ai_next) {
+		char host[NI_MAXHOST];
+		char serv[NI_MAXSERV];
+
+		getnameinfo(i->ai_addr, i->ai_addrlen, host, NI_MAXHOST, serv, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
+
+		std::cout << host << " " << i->ai_family << " " << i->ai_socktype << "\n";
+	}
+
+	freeaddrinfo(res);
 	return 0;
 }
