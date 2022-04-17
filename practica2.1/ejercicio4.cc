@@ -33,7 +33,7 @@ int main(int argc, char **argv){
 
     bool exit = false;
     while (!exit){
-        // Nombres de host y de servicio
+        // Nombres de host y de servidor
         char host[NI_MAXHOST];
 		char serv[NI_MAXSERV];
 

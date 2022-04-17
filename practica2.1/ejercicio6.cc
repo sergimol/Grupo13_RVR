@@ -24,7 +24,7 @@ class MessageThread{
 
                 ssize_t size = recvfrom(sd, msg, 255, 0, &soc, &addrlen);
                 getnameinfo(&soc, addrlen, host, NI_MAXHOST, serv, NI_MAXSERV, NI_NUMERICHOST);
-                std::cout << size << " bytes de " << host << " " << serv << " Thread: " << pthread_self() << "\n";
+                std::cout << size << " bytes de " << host << " " << serv << " Hilo: " << pthread_self() << "\n";
 
                 char buffer[256];
                 memset((void*) buffer, '\0', 256);
