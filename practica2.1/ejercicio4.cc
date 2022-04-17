@@ -55,7 +55,8 @@ int main(int argc, char **argv){
 
             send(sd_client, buffer, nBytes, 0);
 
-            exit = (nBytes == 0 || !strcmp(buffer, "Q") || !strcmp(buffer, "q"));
+            if (nBytes == 0 || !strcmp(buffer, "Q") || !strcmp(buffer, "q"))
+                exit = true;
         }
     }
     std::cout << "Conexión terminada\n";
