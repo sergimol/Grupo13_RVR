@@ -56,8 +56,9 @@ int main(int argc, char** argv) {
     }
 
     int sd = socket(res->ai_family, res->ai_socktype, 0);
-    if (sd != 0) {
+    if (sd == -1) {
         std::cout << gai_strerror(sd) << "\n";
+        return -1;
     }
 
     // Asigna la dirección al socket
