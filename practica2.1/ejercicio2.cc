@@ -30,7 +30,7 @@ void processMsg(struct sockaddr* addr, socklen_t addrlen, char command, int sd, 
         // Cerrar la conexión
     case 'q':
         exit = true;
-        strcpy(msg, "Finalizando conexión...");
+        strcpy(msg, "Saliendo...");
         sendto(sd, "", 0, 0, addr, addrlen);
         break;
     default:
