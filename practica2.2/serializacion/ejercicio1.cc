@@ -36,7 +36,16 @@ public:
 
     int from_bin(char * data)
     {
-        //
+        // Copia data en el buffer
+        char* buffer = data + sizeof(int32_t);
+        // Copia el nombre del buffer
+        memcpy(name, buffer, MAX_NAME);
+        buffer += MAX_NAME;
+        // Copia x del buffer
+        memcpy(&x, buffer, sizeof(int16_t));
+        buffer += sizeof(int16_t);
+        // Copia y del buffer
+        memcpy(&y, buffer, sizeof(int16_t));
         return 0;
     }
 
@@ -61,14 +70,14 @@ int main(int argc, char **argv)
     write(file, one_w.data(), one_w.size());
     close(file);
     // 3. Leer el fichero
-    /*char buffer[256];
+    char buffer[256];
     file = ("./jugador.bin", O_RDONLY);
     read(file, buffer, 256);
     close(file);
     // 4. "Deserializar" en one_r
     one_r.from_bin(buffer);
     // 5. Mostrar el contenido de one_r
-    std::cout << one_r.data() << "\n";*/
+    std::cout << "Name: " << one_r.name << " X: " << one_r.x << " Y: " << one_r.y << "\n";
 
     return 0;
 }
