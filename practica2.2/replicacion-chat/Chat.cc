@@ -53,20 +53,21 @@ void ChatServer::do_messages()
         // - LOGIN: Añadir al vector clients
         // - LOGOUT: Eliminar del vector clients
         // - MESSAGE: Reenviar el mensaje a todos los clientes (menos el emisor)
-        std::unique_ptr<Socket> clnt;
+        Socket* clnt;
         ChatMessage msg;
-        socket.recv(msg, clnt.get());
+        socket.recv(msg, clnt);
 
         Socket* sock;
         switch(msg.type){
             case ChatMessage::LOGIN:
-                clients.push_back(std::move(clnt));
+                clients.push_back(clnt);
                 std::cout << msg.nick.c_str() << " se conectó\n";
+                std::cout << "Conectados " << clients.size() << "\n";   
                 break;
             case ChatMessage::LOGOUT:
                 std::cout << msg.nick.c_str() << " se desconectó\n";
                 for(int i = 0; i < clients.size(); ++i) {
-                    sock = clients[i].get();
+                    sock = clients[i];
                     if(*sock == *clnt) {
                         clients.erase(clients.begin() + i);
                         break;
@@ -76,19 +77,14 @@ void ChatServer::do_messages()
                 break;
             case ChatMessage::MESSAGE:
                 for(int i = 0; i < clients.size(); ++i) {
-                    sock = clients[i].get();
-                    if(!(*sock == *clnt)){
-                        std::cout << msg.nick.c_str() << " envió un mensaje\n";
+                    sock = clients[i];
+                    if(!(*sock == *clnt))
                         socket.send(msg, *sock);
-                        break;
-                    }
                 }
-                break;
-            default:
+                std::cout << msg.nick.c_str() << " envió un mensaje: " << msg.message.c_str() << "\n";
                 break;
         }
 
-        std::cout << "Conectados " << clients.size() << "\n";
     }
 }
 
